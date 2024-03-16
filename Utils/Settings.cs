@@ -61,7 +61,7 @@ namespace DrakiaXYZ.Hazardifier.Utils
             ConfigEntries.Add(DisableLasers = Config.Bind(
                 GeneralSectionTitle,
                 "Disable Lasers",
-                true,
+                false,
                 new ConfigDescription(
                     "Disable the visibility of the trip lasers on mines, giving no external indication where mines are or whether they're active",
                     null,
