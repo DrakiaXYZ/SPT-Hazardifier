@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using DrakiaXYZ.Hazardifier.Utils;
+using Aki.Reflection.Utils;
+using System.Linq;
+using System.Collections;
 
 namespace DrakiaXYZ.Hazardifier
 {
@@ -18,7 +21,45 @@ namespace DrakiaXYZ.Hazardifier
         public static GameObject MineTemplatePrefab;
 
         private GameWorld GameWorld;
+
         private static FieldInfo _mineDataField;
+        private static FieldInfo _botZoneAmbushPointsField;
+        private static FieldInfo _navPointToWallField;
+        private static FieldInfo _aiCoverPointsField;
+        private static FieldInfo _groupPointWallDirectionField;
+        private static FieldInfo _groupPointCoverTypeField;
+        private static FieldInfo _groupPointNeighborTypeField;
+        private static FieldInfo _localGameBotsControllerField;
+
+        private static PropertyInfo _navPointPositionProperty;
+        private static PropertyInfo _botsControllerCoverProperty;
+        private static PropertyInfo _groupPointPositionProperty;
+
+        static HazardifierComponent()
+        {
+            // Used for 3.7.6 support
+            _botZoneAmbushPointsField = typeof(BotZone).GetField("AmbushPoints");
+            _navPointPositionProperty = typeof(CustomNavigationPoint).GetProperty("Position");
+            _navPointToWallField = typeof(CustomNavigationPoint).GetField("ToWallVector");
+
+            // Used for 3.8.0 support
+            Type aiCoversType = PatchConstants.EftTypes.SingleOrDefault(x => x.Name == "AICoversData");
+            Type groupPointType = PatchConstants.EftTypes.SingleOrDefault(x => x.Name == "GroupPoint");
+            if (aiCoversType != null && groupPointType != null)
+            {
+                Type localGameType = PatchConstants.EftTypes.SingleOrDefault(x => x.Name == "LocalGame");
+                _localGameBotsControllerField = AccessTools.Field(localGameType, "botsController_0");
+                _botsControllerCoverProperty = AccessTools.Property(typeof(BotsController), "CoversData");
+                _aiCoverPointsField = AccessTools.Field(aiCoversType, "Points");
+                _groupPointPositionProperty = AccessTools.Property(groupPointType, "Position");
+                _groupPointWallDirectionField = AccessTools.Field(groupPointType, "WallDirection");
+                _groupPointCoverTypeField = AccessTools.Field(groupPointType, "CoverType");
+                _groupPointNeighborTypeField = AccessTools.Field(groupPointType, "PointWithNeighborType");
+            }
+
+
+            _mineDataField = AccessTools.Field(typeof(MineDirectional), "_mineData");
+    }
 
         private HazardifierComponent()
         {
@@ -26,8 +67,6 @@ namespace DrakiaXYZ.Hazardifier
             {
                 Logger = BepInEx.Logging.Logger.CreateLogSource(nameof(HazardifierComponent));
             }
-
-            _mineDataField = AccessTools.Field(typeof(MineDirectional), "_mineData");
         }
 
         public void Awake()
@@ -51,30 +90,70 @@ namespace DrakiaXYZ.Hazardifier
             if (Settings.EnableNewMines.Value)
             {
                 // Add our own custom mines
-                var botZones = LocationScene.GetAllObjects<BotZone>();
-                List<CustomNavigationPoint> allAmbushPoints = new List<CustomNavigationPoint>();
-                foreach (var botZone in botZones)
-                {
-                    allAmbushPoints.AddRange(botZone.AmbushPoints);
-                }
+                List<MinePoint> minePoints = GetPositions();
 
                 // Add ambush points to a random selection of 5-15% of ambush points
                 int mineAmount = Settings.MineAmount.Value / 2;
                 int rangeMin = mineAmount - 5;
                 int rangeMax = mineAmount + 5;
-                var mineCount = Math.Ceiling((UnityEngine.Random.Range(rangeMin, rangeMax) / 100f) * allAmbushPoints.Count);
+                var mineCount = Math.Ceiling((UnityEngine.Random.Range(rangeMin, rangeMax) / 100f) * minePoints.Count);
                 for (int i = 0; i < mineCount; i++)
                 {
-                    var index = UnityEngine.Random.Range(0, allAmbushPoints.Count);
-                    var ambushPoint = allAmbushPoints[index];
-                    var rotation = Quaternion.LookRotation(ambushPoint.ToWallVector, Vector3.up) * Quaternion.Euler(0, 180, 0);
-                    AddMine(ambushPoint.Position, rotation);
+                    var index = UnityEngine.Random.Range(0, minePoints.Count);
+                    var minePoint = minePoints[index];
+                    var rotation = Quaternion.LookRotation(minePoint.ToWallVector, Vector3.up) * Quaternion.Euler(0, 180, 0);
+                    AddMine(minePoint.Position, rotation);
 
-                    allAmbushPoints.RemoveAt(index);
+                    minePoints.RemoveAt(index);
                 }
 
-                Logger.LogDebug($"Created {mineCount} mines out of a potential {mineCount + allAmbushPoints.Count} points");
+                Logger.LogDebug($"Created {mineCount} mines out of a potential {mineCount + minePoints.Count} points");
             }
+        }
+
+        private List<MinePoint> GetPositions()
+        {
+            var minePoints = new List<MinePoint>();
+
+            // Handle 3.8.0 and later
+            if (_botsControllerCoverProperty != null)
+            {
+                var botGame = Singleton<IBotGame>.Instance;
+                var botsController = _localGameBotsControllerField.GetValue(botGame);
+                var aiCoversData = _botsControllerCoverProperty.GetValue(botsController);
+                var pointsList = (IList)_aiCoverPointsField.GetValue(aiCoversData);
+                foreach (var point in pointsList)
+                {
+                    if ((CoverType)_groupPointCoverTypeField.GetValue(point) == CoverType.Wall &&
+                        (PointWithNeighborType)_groupPointNeighborTypeField.GetValue(point) == PointWithNeighborType.ambush)
+                    {
+                        minePoints.Add(new MinePoint()
+                        {
+                            Position = (Vector3)_groupPointPositionProperty.GetValue(point),
+                            ToWallVector = (Vector3)_groupPointWallDirectionField.GetValue(point)
+                        });
+                    }
+                }
+            }
+            // Handle 3.7.6 and earlier
+            else
+            {
+                var botZones = LocationScene.GetAllObjects<BotZone>();
+                foreach (var botZone in botZones)
+                {
+                    var ambushPoints = (IList)_botZoneAmbushPointsField.GetValue(botZone);
+                    foreach (var point in ambushPoints)
+                    {
+                        minePoints.Add(new MinePoint()
+                        {
+                            Position = (Vector3)_navPointPositionProperty.GetValue(point),
+                            ToWallVector = (Vector3)_navPointToWallField.GetValue(point)
+                        });
+                    }
+                }
+            }
+
+            return minePoints;
         }
 
         private MineDirectional AddMine(Vector3 position, Quaternion rotation)
