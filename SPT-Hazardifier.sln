@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPT-Hazardifier", "SPT-Hazardifier.csproj", "{FDEA3D59-9858-45AC-A046-134378BF91E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		UnityEditor|Any CPU = UnityEditor|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDEA3D59-9858-45AC-A046-134378BF91E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDEA3D59-9858-45AC-A046-134378BF91E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDEA3D59-9858-45AC-A046-134378BF91E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDEA3D59-9858-45AC-A046-134378BF91E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDEA3D59-9858-45AC-A046-134378BF91E5}.UnityEditor|Any CPU.ActiveCfg = UnityEditor|Any CPU
+		{FDEA3D59-9858-45AC-A046-134378BF91E5}.UnityEditor|Any CPU.Build.0 = UnityEditor|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D410BA6-E530-4945-A8B4-2115F33F47FE}
+	EndGlobalSection
+EndGlobal
