@@ -121,7 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RayStart: 0.1
   MaxDistance: 5
-  UsePointLight: 1
+  UsePointLight: 0
   BeamMaterial: {fileID: 0}
   PointMaterial: {fileID: 0}
   Mask:
@@ -129,11 +129,11 @@ MonoBehaviour:
     m_Bits: 69889
   BeamSize: 0.01
   PointSizeClose: 0.017
-  PointSizeFar: 0.2
-  SurfaceOffsetForLight: 0.1
+  PointSizeFar: 0.017
+  SurfaceOffsetForLight: 0.05
   LightRange: 0.2
-  LightIntensity: 3.1
-  IntensityFactor: 1
+  LightIntensity: 2
+  IntensityFactor: 0.25
   Cookie: {fileID: 0}
   AngleCloseFar: {x: 15, y: 300}
 --- !u!23 &2805835501569034134
@@ -597,7 +597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RayStart: 0.1
   MaxDistance: 5
-  UsePointLight: 1
+  UsePointLight: 0
   BeamMaterial: {fileID: 0}
   PointMaterial: {fileID: 0}
   Mask:
@@ -605,11 +605,11 @@ MonoBehaviour:
     m_Bits: 69889
   BeamSize: 0.01
   PointSizeClose: 0.017
-  PointSizeFar: 0.2
-  SurfaceOffsetForLight: 0.1
+  PointSizeFar: 0.017
+  SurfaceOffsetForLight: 0.05
   LightRange: 0.2
-  LightIntensity: 3.1
-  IntensityFactor: 1
+  LightIntensity: 2
+  IntensityFactor: 0.25
   Cookie: {fileID: 0}
   AngleCloseFar: {x: 15, y: 300}
 --- !u!23 &5545721322909648424

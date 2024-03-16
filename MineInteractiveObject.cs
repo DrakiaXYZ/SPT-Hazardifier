@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using EFT.Interactive;
+using System.Reflection;
+using HarmonyLib;
+using System.Linq;
+using DrakiaXYZ.Hazardifier.Utils;
 
 namespace DrakiaXYZ.Hazardifier
 {
@@ -12,26 +16,28 @@ namespace DrakiaXYZ.Hazardifier
     {
 #if !UNITY_EDITOR
         private MineDirectional mineDirectional;
+
+        // We'll get the first boolean field, this should hopefully be the isArmed field
+        private static FieldInfo _isDisarmedField = AccessTools.GetDeclaredFields(typeof(MineDirectional)).FirstOrDefault(x => x.FieldType == typeof(bool));
+
         public void Awake()
         {
             mineDirectional = GetComponentInParent<MineDirectional>();
             this.InteractionDirection = Vector3.zero;
+
+            if (Settings.DisableLasers.Value)
+            {
+                var lasers = mineDirectional.GetComponentsInChildren<LaserBeam>();
+                foreach (var laser in lasers)
+                {
+                    laser.enabled = false;
+                }
+            }
         }
 
         public bool IsArmed()
         {
-            // The actual armed state is harder to determine, as it's a private bool
-            // so we'll just use the lasers as an indicator
-            var lasers = mineDirectional.GetComponentsInChildren<LaserBeam>();
-            foreach (var laser in lasers)
-            {
-                if (laser.enabled)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return !(bool)_isDisarmedField.GetValue(mineDirectional);
         }
 
         public void DisarmMine()
@@ -49,10 +55,13 @@ namespace DrakiaXYZ.Hazardifier
         {
             mineDirectional.SetArmed(true);
 
-            var lasers = mineDirectional.GetComponentsInChildren<LaserBeam>();
-            foreach (var laser in lasers)
+            if (!Settings.DisableLasers.Value)
             {
-                laser.enabled = true;
+                var lasers = mineDirectional.GetComponentsInChildren<LaserBeam>();
+                foreach (var laser in lasers)
+                {
+                    laser.enabled = true;
+                }
             }
         }
 #else

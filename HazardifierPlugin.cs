@@ -70,7 +70,6 @@ namespace DrakiaXYZ.Hazardifier
                 laser.BeamMaterial = BeamMaterial;
                 laser.PointMaterial = PointMaterial;
                 laser.Cookie = CookieTexture;
-                laser.UsePointLight = false;
             }
         }
     }

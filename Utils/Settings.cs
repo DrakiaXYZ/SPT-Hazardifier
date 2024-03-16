@@ -16,6 +16,7 @@ namespace DrakiaXYZ.Hazardifier.Utils
         public static ConfigEntry<bool> MakeBsgMinesShootable;
         public static ConfigEntry<float> MineDisarmTime;
         public static ConfigEntry<bool> AllowArming;
+        public static ConfigEntry<bool> DisableLasers;
 
         public static List<ConfigEntryBase> ConfigEntries = new List<ConfigEntryBase>();
 
@@ -54,6 +55,15 @@ namespace DrakiaXYZ.Hazardifier.Utils
                 true,
                 new ConfigDescription(
                     "Whether to allow re-arming a mine after you've disarmed it",
+                    null,
+                    new ConfigurationManagerAttributes { })));
+
+            ConfigEntries.Add(DisableLasers = Config.Bind(
+                GeneralSectionTitle,
+                "Disable Lasers",
+                true,
+                new ConfigDescription(
+                    "Disable the visibility of the trip lasers on mines, giving no external indication where mines are or whether they're active",
                     null,
                     new ConfigurationManagerAttributes { })));
 
