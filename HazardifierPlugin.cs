@@ -24,6 +24,15 @@ namespace DrakiaXYZ.Hazardifier
 
         private void Awake()
         {
+            // Kill on April 2nd or later
+            DateTime killDate = DateTime.Parse("April 1, 2024");
+            if (DateTime.Today > killDate)
+            {
+                Logger.LogDebug("Hazardifier Disabled, haha funny joke");
+                _loaded = true;
+                return;
+            }
+            
             new HazardifierPatch().Enable();
             new MineTriggerRaycastPatch().Enable();
             new MineInteractivePatch().Enable();
