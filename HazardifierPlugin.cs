@@ -13,7 +13,7 @@ using DrakiaXYZ.Hazardifier.Patches;
 
 namespace DrakiaXYZ.Hazardifier
 {
-    [BepInPlugin("xyz.drakia.hazardifier", "DrakiaXYZ-Hazardifier", "1.0.0")]
+    [BepInPlugin("xyz.drakia.apr1.hazardifier", "Hazardifier", "1.0.0")]
     public class HazardifierPlugin : BaseUnityPlugin
     {
         private const string LaserBundlePath = "assets/systems/effects/laserbeam/laser.bundle";
@@ -24,8 +24,6 @@ namespace DrakiaXYZ.Hazardifier
 
         private void Awake()
         {
-            Settings.Init(Config);
-
             new HazardifierPatch().Enable();
             new MineTriggerRaycastPatch().Enable();
             new MineInteractivePatch().Enable();
@@ -43,7 +41,7 @@ namespace DrakiaXYZ.Hazardifier
 
         async private Task LoadAssets()
         {
-            var bundlePath = Path.Combine(PluginFolder, "minetemplate.bundle");
+            var bundlePath = Path.Combine(PluginFolder, "assets.bundle");
             var bundle = AssetBundle.LoadFromFile(bundlePath);
             if (bundle == null)
             {

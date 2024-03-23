@@ -73,42 +73,27 @@ namespace DrakiaXYZ.Hazardifier
         {
             this.GameWorld = Singleton<GameWorld>.Instance;
 
-            // Replace BSG mines with our implementation
-            var baseMines = MineDirectional.Mines.ToArray();
-            foreach (var mine in baseMines)
+            // Add our own custom mines
+            List<MinePoint> minePoints = GetPositions();
+
+            var mineCount = 5;
+            // For factory, we stick to 3 mines total
+            if (this.GameWorld.MainPlayer.Location.ToLower().StartsWith("factory"))
             {
-                if (Settings.ConvertBsgMines.Value)
-                {
-                    ReplaceMine(mine);
-                }
-                else if (Settings.MakeBsgMinesShootable.Value)
-                {
-                    AddMineBallisticCollider(mine);
-                }
+                mineCount = 3;
             }
 
-            if (Settings.EnableNewMines.Value)
+            for (int i = 0; i < mineCount; i++)
             {
-                // Add our own custom mines
-                List<MinePoint> minePoints = GetPositions();
+                var index = UnityEngine.Random.Range(0, minePoints.Count);
+                var minePoint = minePoints[index];
+                var rotation = Quaternion.LookRotation(minePoint.ToWallVector, Vector3.up) * Quaternion.Euler(0, 180, 0);
+                AddMine(minePoint.Position, rotation);
 
-                // Add ambush points to a random selection of 5-15% of ambush points
-                int mineAmount = Settings.MineAmount.Value / 2;
-                int rangeMin = mineAmount - 5;
-                int rangeMax = mineAmount + 5;
-                var mineCount = Math.Ceiling((UnityEngine.Random.Range(rangeMin, rangeMax) / 100f) * minePoints.Count);
-                for (int i = 0; i < mineCount; i++)
-                {
-                    var index = UnityEngine.Random.Range(0, minePoints.Count);
-                    var minePoint = minePoints[index];
-                    var rotation = Quaternion.LookRotation(minePoint.ToWallVector, Vector3.up) * Quaternion.Euler(0, 180, 0);
-                    AddMine(minePoint.Position, rotation);
-
-                    minePoints.RemoveAt(index);
-                }
-
-                Logger.LogDebug($"Created {mineCount} mines out of a potential {mineCount + minePoints.Count} points");
+                minePoints.RemoveAt(index);
             }
+
+            Logger.LogDebug($"Created {mineCount} mines");
         }
 
         private List<MinePoint> GetPositions()

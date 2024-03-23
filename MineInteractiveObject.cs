@@ -24,15 +24,6 @@ namespace DrakiaXYZ.Hazardifier
         {
             mineDirectional = GetComponentInParent<MineDirectional>();
             this.InteractionDirection = Vector3.zero;
-
-            if (Settings.DisableLasers.Value)
-            {
-                var lasers = mineDirectional.GetComponentsInChildren<LaserBeam>();
-                foreach (var laser in lasers)
-                {
-                    laser.enabled = false;
-                }
-            }
         }
 
         public bool IsArmed()
@@ -55,13 +46,10 @@ namespace DrakiaXYZ.Hazardifier
         {
             mineDirectional.SetArmed(true);
 
-            if (!Settings.DisableLasers.Value)
+            var lasers = mineDirectional.GetComponentsInChildren<LaserBeam>();
+            foreach (var laser in lasers)
             {
-                var lasers = mineDirectional.GetComponentsInChildren<LaserBeam>();
-                foreach (var laser in lasers)
-                {
-                    laser.enabled = true;
-                }
+                laser.enabled = true;
             }
         }
 #else

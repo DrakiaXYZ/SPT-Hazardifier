@@ -60,7 +60,7 @@ namespace DrakiaXYZ.Hazardifier.Patches
                 IList menuItems = _menuActionsField.GetValue(menu) as IList;
 
                 // Only create a menu item if the mine is armed, or we're allowed to re-arm it
-                if (mineInteractiveObject.IsArmed() || Settings.AllowArming.Value)
+                if (mineInteractiveObject.IsArmed())
                 {
                     // Create the action handler
                     var actionHandler = new DisarmActionHandler
@@ -100,11 +100,11 @@ namespace DrakiaXYZ.Hazardifier.Patches
                 if (_idleStateType.IsAssignableFrom(owner.Player.CurrentState.GetType()))
                 {
                     // Show the timer panel
-                    owner.ShowObjectivesPanel(mineInteractiveObject.IsArmed() ? "Disarming Mine {0:F1}" : "Arming Mine {0:F1}", Settings.MineDisarmTime.Value);
+                    owner.ShowObjectivesPanel(mineInteractiveObject.IsArmed() ? "Disarming Mine {0:F1}" : "Arming Mine {0:F1}", 5);
 
                     // Start the countdown, and trigger the ActionCompleteHandler when it's done
                     MovementState currentManagedState = owner.Player.CurrentManagedState;
-                    float plantTime = Settings.MineDisarmTime.Value;
+                    float plantTime = 5;
                     ActionCompleteHandler actionCompleteHandler = new ActionCompleteHandler()
                     {
                         owner = owner,
