@@ -406,22 +406,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mineData:
-    _blindness: {x: 10, y: 10, z: 10}
-    _contusion: {x: 10, y: 10, z: 10}
+    _blindness: {x: 0, y: 10, z: 10}
+    _contusion: {x: 0, y: 10, z: 10}
     _armorDistanceDistanceDamage: {x: 10, y: 10, z: 10}
     _minExplosionDistance: 0
     _maxExplosionDistance: 5.5
-    _fragmentsCount: 100
-    _strength: 25
+    _fragmentsCount: 0
+    _strength: 0
     _tag: DrakiaXYZ
-    _armorDamage: 0.7
+    _armorDamage: 0
     _staminaBurnRate: 5
     _penetrationPower: 32
     _fragmentType: 5996f6d686f77467977ba6cc
     _fxName: Grenade_new
     _ignoreRole: 0
     _directionalDamageAngle: 35
-    _directionalDamageMultiplier: 300
+    _directionalDamageMultiplier: 1
 --- !u!1 &4644766971355855341
 GameObject:
   m_ObjectHideFlags: 0
