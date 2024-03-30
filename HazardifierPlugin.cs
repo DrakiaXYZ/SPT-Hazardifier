@@ -25,8 +25,9 @@ namespace DrakiaXYZ.Hazardifier
         private void Awake()
         {
             // Kill on April 2nd or later
-            DateTime killDate = DateTime.Parse("April 1, 2024");
-            if (DateTime.Today > killDate)
+            var currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            long killTimestamp = 1712026800;
+            if (currentTimestamp > killTimestamp)
             {
                 Logger.LogDebug("Hazardifier Disabled, haha funny joke");
                 _loaded = true;
