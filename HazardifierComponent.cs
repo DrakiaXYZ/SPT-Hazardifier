@@ -19,6 +19,7 @@ namespace DrakiaXYZ.Hazardifier
     {
         protected ManualLogSource Logger { get; private set; }
         public static GameObject MineTemplatePrefab;
+        public static GameObject MineTemplateAprilFoolsPrefab;
 
         private GameWorld GameWorld;
 
@@ -134,7 +135,16 @@ namespace DrakiaXYZ.Hazardifier
                 return null;
             }
 
-            GameObject mineObject = Instantiate(MineTemplatePrefab);
+            GameObject mineObject;
+            if (Settings.AprilFoolsMode.Value)
+            {
+                mineObject = Instantiate(MineTemplateAprilFoolsPrefab);
+            }
+            else
+            {
+                mineObject = Instantiate(MineTemplatePrefab);
+            }
+
             mineObject.transform.SetParent(this.gameObject.transform);
             mineObject.transform.rotation = rotation;
             mineObject.transform.position = position;

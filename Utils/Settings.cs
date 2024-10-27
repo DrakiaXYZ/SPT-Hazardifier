@@ -17,6 +17,7 @@ namespace DrakiaXYZ.Hazardifier.Utils
         public static ConfigEntry<float> MineDisarmTime;
         public static ConfigEntry<bool> AllowArming;
         public static ConfigEntry<bool> DisableLasers;
+        public static ConfigEntry<bool> AprilFoolsMode;
 
         public static List<ConfigEntryBase> ConfigEntries = new List<ConfigEntryBase>();
 
@@ -82,6 +83,15 @@ namespace DrakiaXYZ.Hazardifier.Utils
                 true,
                 new ConfigDescription(
                     "Whether to make BSG mines explode when shot. Ignored if Convert BSG Mines is enabled",
+                    null,
+                    new ConfigurationManagerAttributes { })));
+
+            ConfigEntries.Add(AprilFoolsMode = Config.Bind(
+                GeneralSectionTitle,
+                "April Fools Mode",
+                false,
+                new ConfigDescription(
+                    "Whether to make the random mines harmless, but still give a concussion/blinding effect",
                     null,
                     new ConfigurationManagerAttributes { })));
 

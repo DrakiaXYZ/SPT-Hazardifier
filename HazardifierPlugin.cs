@@ -10,6 +10,7 @@ using Comfort.Common;
 using System.Threading.Tasks;
 using DrakiaXYZ.Hazardifier.Utils;
 using DrakiaXYZ.Hazardifier.Patches;
+using System.Collections.Generic;
 
 namespace DrakiaXYZ.Hazardifier
 {
@@ -51,7 +52,8 @@ namespace DrakiaXYZ.Hazardifier
             }
 
             HazardifierComponent.MineTemplatePrefab = AssetUtils.LoadAsset<GameObject>(bundle, "Assets/Prefabs/MineTemplate.prefab");
-            if (HazardifierComponent.MineTemplatePrefab == null)
+            HazardifierComponent.MineTemplateAprilFoolsPrefab = AssetUtils.LoadAsset<GameObject>(bundle, "Assets/Prefabs/MineTemplateAprilFools.prefab");
+            if (HazardifierComponent.MineTemplatePrefab == null || HazardifierComponent.MineTemplateAprilFoolsPrefab == null)
             {
                 throw new Exception("Error loading MineTemplatePrefab");
             }
@@ -64,7 +66,9 @@ namespace DrakiaXYZ.Hazardifier
             Texture2D CookieTexture = AssetUtils.GetAsset<Texture2D>(CookieBundlePath, "glow_particle_bright");
 
             // Setup the laser beam on the template
-            LaserBeam[] lasers = HazardifierComponent.MineTemplatePrefab.GetComponentsInChildren<LaserBeam>();
+            List<LaserBeam> lasers = new List<LaserBeam>();
+            lasers.AddRange(HazardifierComponent.MineTemplatePrefab.GetComponentsInChildren<LaserBeam>());
+            lasers.AddRange(HazardifierComponent.MineTemplateAprilFoolsPrefab.GetComponentsInChildren<LaserBeam>());
             foreach (var laser in lasers)
             {
                 laser.BeamMaterial = BeamMaterial;
