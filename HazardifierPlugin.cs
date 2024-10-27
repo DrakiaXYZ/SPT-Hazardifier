@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace DrakiaXYZ.Hazardifier
 {
-    [BepInPlugin("xyz.drakia.hazardifier", "DrakiaXYZ-Hazardifier", "1.0.0")]
+    [BepInPlugin("xyz.drakia.hazardifier", "DrakiaXYZ-Hazardifier", "1.0.1")]
     public class HazardifierPlugin : BaseUnityPlugin
     {
         private const string LaserBundlePath = "assets/systems/effects/laserbeam/laser.bundle";

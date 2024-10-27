@@ -7,17 +7,28 @@ namespace DrakiaXYZ.Hazardifier.Utils
     public class Settings
     {
         private const string GeneralSectionTitle = "1. General";
+        private const string MapSettings = "2. Map Claymore Settings";
 
         public static ConfigFile Config;
 
         public static ConfigEntry<bool> EnableNewClaymores;
-        public static ConfigEntry<int> ClaymoreAmount;
         public static ConfigEntry<bool> ConvertBsgClaymores;
         public static ConfigEntry<bool> MakeBsgClaymoresShootable;
         public static ConfigEntry<float> ClaymoreDisarmTime;
         public static ConfigEntry<bool> AllowArming;
         public static ConfigEntry<bool> DisableLasers;
         public static ConfigEntry<bool> AprilFoolsMode;
+
+        public static ConfigEntry<int> GroundZeroClaymoreAmount;
+        public static ConfigEntry<int> StreetsClaymoreAmount;
+        public static ConfigEntry<int> InterchangeClaymoreAmount;
+        public static ConfigEntry<int> CustomsClaymoreAmount;
+        public static ConfigEntry<int> FactoryClaymoreAmount;
+        public static ConfigEntry<int> WoodsClaymoreAmount;
+        public static ConfigEntry<int> ReserveClaymoreAmount;
+        public static ConfigEntry<int> LighthouseClaymoreAmount;
+        public static ConfigEntry<int> ShorelineClaymoreAmount;
+        public static ConfigEntry<int> LabsClaymoreAmount;
 
         public static List<ConfigEntryBase> ConfigEntries = new List<ConfigEntryBase>();
 
@@ -30,15 +41,6 @@ namespace DrakiaXYZ.Hazardifier.Utils
                 new ConfigDescription(
                     "Whether to enable new claymores on maps",
                     null,
-                    new ConfigurationManagerAttributes { })));
-
-            ConfigEntries.Add(ClaymoreAmount = Config.Bind(
-                GeneralSectionTitle,
-                "Claymore Amount",
-                10,
-                new ConfigDescription(
-                    "The density of new claymores. Not an actual count, but a weight based on map size. Higher = higher performance hit",
-                    new AcceptableValueRange<int>(5, 100),
                     new ConfigurationManagerAttributes { })));
 
             ConfigEntries.Add(ClaymoreDisarmTime = Config.Bind(
@@ -93,6 +95,87 @@ namespace DrakiaXYZ.Hazardifier.Utils
                 new ConfigDescription(
                     "Whether to make the random claymores harmless, but still give a concussion/blinding effect",
                     null,
+                    new ConfigurationManagerAttributes { })));
+
+            ConfigEntries.Add(CustomsClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Customs Claymore Count",
+                75,
+                new ConfigDescription(
+                    "The amount of new claymores on Customs. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(FactoryClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Factory Claymore Count",
+                50,
+                new ConfigDescription(
+                    "The amount of new claymores on Factory. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(GroundZeroClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Ground Zero Claymore Count",
+                75,
+                new ConfigDescription(
+                    "The amount of new claymores on Ground Zero. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(InterchangeClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Interchange Claymore Count",
+                100,
+                new ConfigDescription(
+                    "The amount of new claymores on Interchange. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(LabsClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Labs Claymore Count",
+                75,
+                new ConfigDescription(
+                    "The amount of new claymores on Labs. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(LighthouseClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Lighthouse Claymore Count",
+                100,
+                new ConfigDescription(
+                    "The amount of new claymores on Lighthouse. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(ReserveClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Reserve Claymore Count",
+                75,
+                new ConfigDescription(
+                    "The amount of new claymores on Reserve. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(ShorelineClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Shoreline Claymore Count",
+                100,
+                new ConfigDescription(
+                    "The amount of new claymores on Shoreline. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(StreetsClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Streets Claymore Count",
+                100,
+                new ConfigDescription(
+                    "The amount of new claymores on Streets. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
+                    new ConfigurationManagerAttributes { })));
+            ConfigEntries.Add(WoodsClaymoreAmount = Config.Bind(
+                MapSettings,
+                "Woods Claymore Count",
+                100,
+                new ConfigDescription(
+                    "The amount of new claymores on Woods. Higher = higher performance hit",
+                    new AcceptableValueRange<int>(0, 500),
                     new ConfigurationManagerAttributes { })));
 
             RecalcOrder();

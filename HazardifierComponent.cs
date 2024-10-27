@@ -63,6 +63,7 @@ namespace DrakiaXYZ.Hazardifier
         public void Awake()
         {
             this.GameWorld = Singleton<GameWorld>.Instance;
+            string mapName = this.GameWorld.MainPlayer.Location.ToLower();
 
             // Replace BSG mines with our implementation
             var baseMines = MineDirectional.Mines.ToArray();
@@ -84,10 +85,7 @@ namespace DrakiaXYZ.Hazardifier
                 List<MinePoint> minePoints = GetPositions();
 
                 // Add ambush points to a random selection of 5-15% of ambush points
-                int mineAmount = Settings.ClaymoreAmount.Value / 2;
-                int rangeMin = mineAmount - 5;
-                int rangeMax = mineAmount + 5;
-                var mineCount = Math.Ceiling((UnityEngine.Random.Range(rangeMin, rangeMax) / 100f) * minePoints.Count);
+                var mineCount = Math.Min(getMineCount(mapName), minePoints.Count);
                 for (int i = 0; i < mineCount; i++)
                 {
                     var index = UnityEngine.Random.Range(0, minePoints.Count);
@@ -100,6 +98,53 @@ namespace DrakiaXYZ.Hazardifier
 
                 Logger.LogDebug($"Created {mineCount} mines out of a potential {mineCount + minePoints.Count} points");
             }
+        }
+
+        private int getMineCount(string mapName)
+        {
+            if (mapName.StartsWith("factory4"))
+            {
+                return Settings.FactoryClaymoreAmount.Value;
+            }
+            else if (mapName.StartsWith("sandbox"))
+            {
+                return Settings.GroundZeroClaymoreAmount.Value;
+            }
+            else if (mapName == "bigmap")
+            {
+                return Settings.CustomsClaymoreAmount.Value;
+            }
+            else if (mapName == "interchange")
+            {
+                return Settings.InterchangeClaymoreAmount.Value;
+            }
+            else if (mapName == "laboratory")
+            {
+                return Settings.LabsClaymoreAmount.Value;
+            }
+            else if (mapName == "lighthouse")
+            {
+                return Settings.LighthouseClaymoreAmount.Value;
+            }
+            else if (mapName == "rezervbase")
+            {
+                return Settings.ReserveClaymoreAmount.Value;
+            }
+            else if (mapName == "shoreline")
+            {
+                return Settings.ShorelineClaymoreAmount.Value;
+            }
+            else if (mapName == "tarkovstreets")
+            {
+                return Settings.StreetsClaymoreAmount.Value;
+            }
+            else if (mapName == "woods")
+            {
+                return Settings.WoodsClaymoreAmount.Value;
+            }
+
+            Logger.LogError($"Error, unknown map {mapName}. Disabling claymores");
+            return 0;
         }
 
         private List<MinePoint> GetPositions()
