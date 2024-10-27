@@ -17,7 +17,7 @@ namespace DrakiaXYZ.Hazardifier
 #if !UNITY_EDITOR
         private MineDirectional mineDirectional;
 
-        // We'll get the first boolean field, this should hopefully be the isArmed field
+        // We'll get the first boolean field, this should hopefully be the isDisarmed field
         private static FieldInfo _isDisarmedField = AccessTools.GetDeclaredFields(typeof(MineDirectional)).FirstOrDefault(x => x.FieldType == typeof(bool));
 
         public void Awake()

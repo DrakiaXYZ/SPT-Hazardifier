@@ -100,11 +100,11 @@ namespace DrakiaXYZ.Hazardifier.Patches
                 if (_idleStateType.IsAssignableFrom(owner.Player.CurrentState.GetType()))
                 {
                     // Show the timer panel
-                    owner.ShowObjectivesPanel(mineInteractiveObject.IsArmed() ? "Disarming Mine {0:F1}" : "Arming Mine {0:F1}", Settings.MineDisarmTime.Value);
+                    owner.ShowObjectivesPanel(mineInteractiveObject.IsArmed() ? "Disarming Claymore {0:F1}" : "Arming Claymore {0:F1}", Settings.ClaymoreDisarmTime.Value);
 
                     // Start the countdown, and trigger the ActionCompleteHandler when it's done
                     MovementState currentManagedState = owner.Player.CurrentManagedState;
-                    float plantTime = Settings.MineDisarmTime.Value;
+                    float plantTime = Settings.ClaymoreDisarmTime.Value;
                     ActionCompleteHandler actionCompleteHandler = new ActionCompleteHandler()
                     {
                         owner = owner,
@@ -117,11 +117,11 @@ namespace DrakiaXYZ.Hazardifier.Patches
                 {
                     if (mineInteractiveObject.IsArmed())
                     {
-                        owner.DisplayPreloaderUiNotification("You can't disarm a mine while moving");
+                        owner.DisplayPreloaderUiNotification("You can't disarm a claymore while moving");
                     }
                     else
                     {
-                        owner.DisplayPreloaderUiNotification("You can't arm a mine while moving");
+                        owner.DisplayPreloaderUiNotification("You can't arm a claymore while moving");
                     }
                 }
             }

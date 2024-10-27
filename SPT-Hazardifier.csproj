@@ -31,6 +31,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Package|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Package\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'UnityEditor|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\UnityEditor\</OutputPath>
@@ -102,6 +110,8 @@
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == UnityEditor (
   copy "$(TargetPath)" "$(ProjectDir)\UnityProject\HazardifierMine\Assets\Plugins\$(TargetFileName)"
+) else if $(ConfigurationName) == Package (
+  powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(ProjectDir)\package.ps1
 ) else (
   copy "$(TargetPath)" "$(ProjectDir)\..\..\BepInEx\plugins\$(TargetName)\$(TargetFileName)"
 )</PostBuildEvent>

@@ -68,23 +68,23 @@ namespace DrakiaXYZ.Hazardifier
             var baseMines = MineDirectional.Mines.ToArray();
             foreach (var mine in baseMines)
             {
-                if (Settings.ConvertBsgMines.Value)
+                if (Settings.ConvertBsgClaymores.Value)
                 {
                     ReplaceMine(mine);
                 }
-                else if (Settings.MakeBsgMinesShootable.Value)
+                else if (Settings.MakeBsgClaymoresShootable.Value)
                 {
                     AddMineBallisticCollider(mine);
                 }
             }
 
-            if (Settings.EnableNewMines.Value)
+            if (Settings.EnableNewClaymores.Value)
             {
                 // Add our own custom mines
                 List<MinePoint> minePoints = GetPositions();
 
                 // Add ambush points to a random selection of 5-15% of ambush points
-                int mineAmount = Settings.MineAmount.Value / 2;
+                int mineAmount = Settings.ClaymoreAmount.Value / 2;
                 int rangeMin = mineAmount - 5;
                 int rangeMax = mineAmount + 5;
                 var mineCount = Math.Ceiling((UnityEngine.Random.Range(rangeMin, rangeMax) / 100f) * minePoints.Count);
