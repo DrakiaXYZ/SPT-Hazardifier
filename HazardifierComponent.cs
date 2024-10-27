@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using DrakiaXYZ.Hazardifier.Utils;
-using Aki.Reflection.Utils;
+using SPT.Reflection.Utils;
 using System.Linq;
 using System.Collections;
 
@@ -23,26 +23,17 @@ namespace DrakiaXYZ.Hazardifier
         private GameWorld GameWorld;
 
         private static FieldInfo _mineDataField;
-        private static FieldInfo _botZoneAmbushPointsField;
-        private static FieldInfo _navPointToWallField;
         private static FieldInfo _aiCoverPointsField;
         private static FieldInfo _groupPointWallDirectionField;
         private static FieldInfo _groupPointCoverTypeField;
         private static FieldInfo _groupPointNeighborTypeField;
         private static FieldInfo _localGameBotsControllerField;
 
-        private static PropertyInfo _navPointPositionProperty;
         private static PropertyInfo _botsControllerCoverProperty;
         private static PropertyInfo _groupPointPositionProperty;
 
         static HazardifierComponent()
         {
-            // Used for 3.7.6 support
-            _botZoneAmbushPointsField = typeof(BotZone).GetField("AmbushPoints");
-            _navPointPositionProperty = typeof(CustomNavigationPoint).GetProperty("Position");
-            _navPointToWallField = typeof(CustomNavigationPoint).GetField("ToWallVector");
-
-            // Used for 3.8.0 support
             Type aiCoversType = PatchConstants.EftTypes.SingleOrDefault(x => x.Name == "AICoversData");
             Type groupPointType = PatchConstants.EftTypes.SingleOrDefault(x => x.Name == "GroupPoint");
             if (aiCoversType != null && groupPointType != null)
@@ -57,9 +48,8 @@ namespace DrakiaXYZ.Hazardifier
                 _groupPointNeighborTypeField = AccessTools.Field(groupPointType, "PointWithNeighborType");
             }
 
-
             _mineDataField = AccessTools.Field(typeof(MineDirectional), "_mineData");
-    }
+        }
 
         private HazardifierComponent()
         {
@@ -113,43 +103,22 @@ namespace DrakiaXYZ.Hazardifier
 
         private List<MinePoint> GetPositions()
         {
-            var minePoints = new List<MinePoint>();
+            var botGame = Singleton<IBotGame>.Instance;
+            var botsController = _localGameBotsControllerField.GetValue(botGame);
+            var aiCoversData = _botsControllerCoverProperty.GetValue(botsController);
+            var pointsList = (IList)_aiCoverPointsField.GetValue(aiCoversData);
 
-            // Handle 3.8.0 and later
-            if (_botsControllerCoverProperty != null)
+            var minePoints = new List<MinePoint>();
+            foreach (var point in pointsList)
             {
-                var botGame = Singleton<IBotGame>.Instance;
-                var botsController = _localGameBotsControllerField.GetValue(botGame);
-                var aiCoversData = _botsControllerCoverProperty.GetValue(botsController);
-                var pointsList = (IList)_aiCoverPointsField.GetValue(aiCoversData);
-                foreach (var point in pointsList)
+                if ((CoverType)_groupPointCoverTypeField.GetValue(point) == CoverType.Wall &&
+                    (PointWithNeighborType)_groupPointNeighborTypeField.GetValue(point) == PointWithNeighborType.ambush)
                 {
-                    if ((CoverType)_groupPointCoverTypeField.GetValue(point) == CoverType.Wall &&
-                        (PointWithNeighborType)_groupPointNeighborTypeField.GetValue(point) == PointWithNeighborType.ambush)
+                    minePoints.Add(new MinePoint()
                     {
-                        minePoints.Add(new MinePoint()
-                        {
-                            Position = (Vector3)_groupPointPositionProperty.GetValue(point),
-                            ToWallVector = (Vector3)_groupPointWallDirectionField.GetValue(point)
-                        });
-                    }
-                }
-            }
-            // Handle 3.7.6 and earlier
-            else
-            {
-                var botZones = LocationScene.GetAllObjects<BotZone>();
-                foreach (var botZone in botZones)
-                {
-                    var ambushPoints = (IList)_botZoneAmbushPointsField.GetValue(botZone);
-                    foreach (var point in ambushPoints)
-                    {
-                        minePoints.Add(new MinePoint()
-                        {
-                            Position = (Vector3)_navPointPositionProperty.GetValue(point),
-                            ToWallVector = (Vector3)_navPointToWallField.GetValue(point)
-                        });
-                    }
+                        Position = (Vector3)_groupPointPositionProperty.GetValue(point),
+                        ToWallVector = (Vector3)_groupPointWallDirectionField.GetValue(point)
+                    });
                 }
             }
 

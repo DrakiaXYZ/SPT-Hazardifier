@@ -406,9 +406,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mineData:
-    _blindness: {x: 10, y: 10, z: 10}
-    _contusion: {x: 10, y: 10, z: 10}
-    _armorDistanceDistanceDamage: {x: 10, y: 10, z: 10}
+    _blindness: {x: 0, y: 10, z: 10}
+    _contusion: {x: 0, y: 10, z: 10}
+    _armorDistanceDistanceDamage: {x: 0, y: 10, z: 10}
     _minExplosionDistance: 0
     _maxExplosionDistance: 5.5
     _fragmentsCount: 100

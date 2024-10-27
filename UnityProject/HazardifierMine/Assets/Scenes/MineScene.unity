@@ -220,6 +220,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2805835501569034134, guid: a6fd633924af0eb4cac97b1a81ac0268,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3058945112237649712, guid: a6fd633924af0eb4cac97b1a81ac0268,
         type: 3}
       propertyPath: m_RootOrder
@@ -279,6 +284,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MineTemplate
+      objectReference: {fileID: 0}
+    - target: {fileID: 3452909368194481884, guid: a6fd633924af0eb4cac97b1a81ac0268,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6fd633924af0eb4cac97b1a81ac0268, type: 3}

@@ -21,7 +21,7 @@ namespace DrakiaXYZ.Hazardifier.Utils
             _retainMethod = AccessTools.FirstMethod(typeof(DependencyGraph<IEasyBundle>), x => x.Name == "Retain" && x.GetParameters().Length == 2);
             _resultType = _retainMethod.ReturnType;
             _loadingJobProp = AccessTools.Property(_resultType, "LoadingJob");
-            Type getAssetType = Aki.Reflection.Utils.PatchConstants.EftTypes.FirstOrDefault(type =>
+            Type getAssetType = SPT.Reflection.Utils.PatchConstants.EftTypes.FirstOrDefault(type =>
             {
                 return type.GetMethods().Any(method => method.Name == "GetAsset");
             });

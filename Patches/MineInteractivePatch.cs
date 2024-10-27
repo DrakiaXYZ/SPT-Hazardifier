@@ -1,6 +1,6 @@
 ﻿#if !UNITY_EDITOR
-using Aki.Reflection.Patching;
-using Aki.Reflection.Utils;
+using SPT.Reflection.Patching;
+using SPT.Reflection.Utils;
 using DrakiaXYZ.Hazardifier.Utils;
 using EFT;
 using HarmonyLib;
