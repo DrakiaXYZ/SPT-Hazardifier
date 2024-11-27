@@ -231,7 +231,7 @@ namespace DrakiaXYZ.Hazardifier
             }
         }
 
-        private void OnMineShot(DamageInfo damage)
+        private void OnMineShot(DamageInfoStruct damage)
         {
             var mine = damage.HittedBallisticCollider.GetComponentInParent<MineDirectional>();
             mine.Explosion();
