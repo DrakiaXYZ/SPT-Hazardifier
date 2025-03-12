@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace DrakiaXYZ.Hazardifier
 {
-    [BepInPlugin("xyz.drakia.hazardifier", "DrakiaXYZ-Hazardifier", "1.1.0")]
+    [BepInPlugin("xyz.drakia.hazardifier", "DrakiaXYZ-Hazardifier", "1.2.0")]
     public class HazardifierPlugin : BaseUnityPlugin
     {
         private const string LaserBundlePath = "assets/systems/effects/laserbeam/laser.bundle";
@@ -34,7 +34,7 @@ namespace DrakiaXYZ.Hazardifier
 
         async private void Update()
         {
-            if (!_loaded && Singleton<PoolManager>.Instance != null)
+            if (!_loaded && Singleton<PoolManagerClass>.Instance != null)
             {
                 Logger.LogInfo("PoolManager Available, loading assets");
                 _loaded = true;
